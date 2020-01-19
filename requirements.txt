@@ -1,4 +1,3 @@
 fontTools
 requests
 numpy
-re
