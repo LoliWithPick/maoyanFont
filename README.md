@@ -9,13 +9,18 @@ Make sure you have installed the modules in the file 'requirements.txt'. Or you 
 确保你已经安装 requirements.txt 文件里的模块。如果没有安装，请使用下面的语句安装：
 
 	pip install -r requirements.txt
-	
+
 ## Example:
+
+<center>
+  <img src="https://img-blog.csdnimg.cn/20200120225840475.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMTUzNDE4,size_16,color_FFFFFF,t_70"/>
+</center>
 
 	import requests
 	import font
 	from lxml import etree
 
+	# 构建头部，获取页面内容
 	url = 'https://maoyan.com/films/247300'
     	header = {
 		'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8,application/signed-exchange;v=b3',
@@ -25,9 +30,14 @@ Make sure you have installed the modules in the file 'requirements.txt'. Or you 
 		'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36'
     	}
     	resp = requests.get(url, headers=header).text
+	
+	# 获取编码字典，并替换页面中的编码
     	font_dict = font.getFont(resp)
    	for key in font_dict.keys():
 		resp = resp.replace(key, font_dict[key])
+		
+	# 下面是额外内容：
+	# 获取评分、票房等数据
     	body = etree.HTML(resp)
     	mark_info = body.xpath('//div[@class="movie-index"]/div')
     	mark = mark_info[0].xpath('string(.)').replace(' ', '')
@@ -45,6 +55,3 @@ Make sure you have installed the modules in the file 'requirements.txt'. Or you 
     	movie['累计票房'] = boxOffice
     	print(movie)
 	
-<center>
-  <img src="https://img-blog.csdnimg.cn/20200120225840475.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMTUzNDE4,size_16,color_FFFFFF,t_70"/>
-</center>
